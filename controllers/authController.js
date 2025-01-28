@@ -30,3 +30,16 @@ exports.login = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+// Получить информацию о текущем пользователе
+exports.me = async (req, res) => {
+  try {
+    const user = await User.findByPk(req.user.id);  // Достаём пользователя по ID из токена
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    res.json({ id: user.id, username: user.username, email: user.email });  // Отправляем данные пользователя
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
